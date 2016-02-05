@@ -28,8 +28,8 @@ function generateCounter(e) {
 function startCounter() {
   if(window.location.search) {
     if(URLSearchParams) {
-      $("#generate").classList.add("hidden");
-      $("#generate").classList.remove("block");
+      $("#form").classList.add("hidden");
+      $("#form").classList.remove("block");
       $("#reset").classList.remove("hidden");
       var u = new URLSearchParams(window.location.search.slice(1));
       var content = base64decode(u.get('content').slice(0, -1));
