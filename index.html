@@ -8,14 +8,18 @@
 
 <body>
   <div class="container">
-    <input type="text" placeholder="Subject" id="subject"/>
-    <input type="text" placeholder="When(month)" id="month"/>
-    <input type="text" placeholder="When(date)" id="date"/>
-    <input type="text" placeholder="When(year)" id="year"/>
-    <input type="submit" value="generate timer" id="generate"/>
-    <div class="url-container"></div>
-    <output></output>
-    <a id="reset" class="hidden">reset</a>
+    <div class="content">
+      <div class="form">
+        <input type="text" placeholder="Subject" id="subject"/>
+        <input type="text" placeholder="mm" id="month"/>
+        <input type="text" placeholder="dd" id="date"/>
+        <input type="text" placeholder="yyyy" id="year"/>
+      </div>
+      <input type="submit" value="generate timer" id="generate" class="block"/>
+      <a id="reset" class="hidden">reset</a>
+      <div class="url-container"></div>
+      <output></output>
+    </div>
   </div>
   <script src="./url-search-params.js"></script>
   <script src="./index.js"></script>

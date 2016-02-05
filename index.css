@@ -1,3 +1,83 @@
+body {
+  background-color: #ef7070;
+  height: 100vh;
+}
+
+.container {
+  position: relative;
+  height: 100%;
+}
+
+.content {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+input[type=text] {
+  padding: 20px;
+  border: none;
+}
+
+#month {
+  margin-left: 10px;
+}
+
+#month, #date {
+  margin-right: -3px;
+  width: 20px;
+}
+
+#year {
+  width: 50px;
+}
+
+#generate {
+  margin: 10px auto 0;
+  padding: 20px;
+}
+
+.url-container {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+#reset {
+  font-size: 19px;
+  display: block;
+  margin-top: 10px;
+  color: #666;
+}
+
 .hidden {
   display: none;
+}
+
+.block {
+  display: block;
+}
+
+a {
+  text-decoration: underline;
+}
+
+output {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+output {
+  font-size: 20px;
+}
+
+second, day, hour, minute {
+  padding: 10px;
+  display: inline-block;
+  width: 30px;
+  font-size: 25px;
+  background-color: #333;
+  color: #fff;
+  position: relative;
 }

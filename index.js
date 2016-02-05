@@ -17,18 +17,19 @@ function generateCounter(e) {
   var date    = +$("#date").value;
   var month   = +$("#month").value;
   var year    = +$("#year").value;
-  
+
   if(validate.date(date) && validate.month(month) && validate.year(year)) {
     var endDate = new Date(year, month - 1, date);
     var content = generateUrl(subject, endDate);
-    $(".url-container").innerHTML = `<a href=${content}>url</a>`;
+    $(".url-container").innerHTML = `<a href=${content}>share url</a>`;
   }
 }
 
-function startCounter() {            
+function startCounter() {
   if(window.location.search) {
     if(URLSearchParams) {
       $("#generate").classList.add("hidden");
+      $("#generate").classList.remove("block");
       $("#reset").classList.remove("hidden");
       var u = new URLSearchParams(window.location.search.slice(1));
       var content = base64decode(u.get('content').slice(0, -1));
@@ -47,7 +48,7 @@ function startCounter() {
 function DateMeasure(endtime) {
   var difference = endtime - new Date();
   var d, h, m, s;
-  
+
   s = Math.floor(difference / 1000);
   m = Math.floor(s / 60);
   s = s % 60;
@@ -55,8 +56,8 @@ function DateMeasure(endtime) {
   m = m % 60;
   d = Math.floor(h / 24);
   h = h % 24;
-  
-  return { diff: difference, days: d, hours: h, minutes: m, seconds: s };  
+
+  return { diff: difference, days: d, hours: h, minutes: m, seconds: s };
 }
 
 var validate = {
@@ -65,15 +66,15 @@ var validate = {
     this.__date = new Date;
     return this.__date;
   },
-  
+
   date: function(d) {
     return d < 31 && d >= (this.today().getDate());
   },
-  
+
   month: function(m) {
     return m < 13 && m >= (this.today().getMonth() + 1) ;
   },
-  
+
   year: function(y) {
     return y >= this.today().getFullYear();
   }
@@ -93,18 +94,18 @@ function retriveContent(str) {
 }
 
 function generateUrl(subject, date) {
-  var location = window.location.href;  
+  var location = window.location.href;
   var content = `<name>${subject}</name><date>${date.toString()}</date>`;
-  
-  if(!location.endsWith('/')) location += '/';  
-  
+
+  if(!location.endsWith('/')) location += '/';
+
   return `${location}?content=${base64encode(content)}`;
 }
 
 function runTimer(subject, endDate) {
   var timer = setInterval(() => {
     var t = DateMeasure(endDate);
-    $("output").innerHTML = `${subject} comming soon in <day>${t.days}</day> days, <hour>${t.hours}</hour> hours, <minute>${t.minutes}</minute> minutes, <second>${t.seconds}</second> seconds`;
+    $("output").innerHTML = `${subject} comming soon in <day>${t.days}</day> days <hour>${t.hours}</hour> hours <minute>${t.minutes}</minute> minutes <second>${t.seconds}</second> seconds`;
     if(t.diff <= 0) clearInterval(timer);
   }, 1001)
 }
