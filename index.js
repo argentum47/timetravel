@@ -2,7 +2,47 @@ function $(sel) {
   return document.querySelector.call(document, sel);
 }
 
-$("#generate").addEventListener("click", generateCounterUrl);
+$("#generate").addEventListener("click", generateCounter);
+$("#reset").addEventListener("click", resetStuff);
+
+window.onload = startCounter;
+
+function resetStuff() {
+  window.location.assign(`http://${window.location.host}`)
+}
+
+function generateCounter(e) {
+  e.preventDefault();
+  var subject = $("#subject").value;
+  var date    = +$("#date").value;
+  var month   = +$("#month").value;
+  var year    = +$("#year").value;
+  
+  if(validate.date(date) && validate.month(month) && validate.year(year)) {
+    var endDate = new Date(year, month - 1, date);
+    var content = generateUrl(subject, endDate);
+    $(".url-container").innerHTML = `<a href=${content}>url</a>`;
+  }
+}
+
+function startCounter() {            
+  if(window.location.search) {
+    if(URLSearchParams) {
+      $("#generate").classList.add("hidden");
+      $("#reset").classList.remove("hidden");
+      var u = new URLSearchParams(window.location.search.slice(1));
+      var content = base64decode(u.get('content').slice(0, -1));
+      var data = retriveContent(content);
+      var date = new Date(data.date);
+
+      $("#subject").value = data.subject;
+      $("#date").value = date.getDate();
+      $("#month").value = date.getMonth() + 1;
+      $("#year").value = date.getFullYear();
+      runTimer(data.subject, date);
+    }
+  }
+}
 
 function DateMeasure(endtime) {
   var difference = endtime - new Date();
@@ -20,39 +60,51 @@ function DateMeasure(endtime) {
 }
 
 var validate = {
-  date: (d) => {
-    return d < 31 && d >= (new Date().getDate());
+  today: () => {
+    if(this.__date) return this.__date;
+    this.__date = new Date;
+    return this.__date;
   },
   
-  month: (m) => {
-    return m < 13 && m >= (new Date().getMonth() + 1) ;
+  date: function(d) {
+    return d < 31 && d >= (this.today().getDate());
   },
   
-  year: (y) => {
-    return y >= new Date().getFullYear();
+  month: function(m) {
+    return m < 13 && m >= (this.today().getMonth() + 1) ;
+  },
+  
+  year: function(y) {
+    return y >= this.today().getFullYear();
   }
 };
 
-var timer = null;
-
-function generateCounterUrl(e) {
-  e.preventDefault();
-  var subject = $("#subject").value;
-  var date = +$("#date").value;
-  var month = +$("#month").value;
-  var year = +$("#year").value;
-  
-  if(validate.date(date) && validate.month(month) && validate.year(year)) {
-   runTimer(subject, date, month, year) 
-  }
+function base64encode(str) {
+  return encodeURIComponent(btoa(str));
 }
 
-function runTimer(subject, date, month, year) {
-  var endDate = new Date(year, month - 1, date);
+function base64decode(str) {
+  return decodeURIComponent(atob(str));
+}
+
+function retriveContent(str) {
+  var parser = new DOMParser().parseFromString(str, "text/html");
+  return {subject: parser.querySelector("name").textContent, date: parser.querySelector("date").textContent};
+}
+
+function generateUrl(subject, date) {
+  var location = window.location.href;  
+  var content = `<name>${subject}</name><date>${date.toString()}</date>`;
+  
+  if(!location.endsWith('/')) location += '/';  
+  
+  return `${location}?content=${base64encode(content)}`;
+}
+
+function runTimer(subject, endDate) {
   var timer = setInterval(() => {
     var t = DateMeasure(endDate);
-    console.log(`${subject} returns in ${t.days} days, ${t.hours} hours, ${t.minutes} minutes, ${t.seconds} seconds`);
-    
+    $("output").innerHTML = `${subject} comming soon in <day>${t.days}</day> days, <hour>${t.hours}</hour> hours, <minute>${t.minutes}</minute> minutes, <second>${t.seconds}</second> seconds`;
     if(t.diff <= 0) clearInterval(timer);
   }, 1001)
 }
