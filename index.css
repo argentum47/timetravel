@@ -1,5 +1,5 @@
 body {
-  background-color: #ef7070;
+  background-color: #FFE066;
   height: 100vh;
 }
 
@@ -62,10 +62,16 @@ a {
 }
 
 output {
+  display: block;
+}
+
+canvas {
   position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
 }
 
 output {
