@@ -3,6 +3,16 @@
 <head>
   <title>Cluck</title>
   <style>
+    html, body, canvas {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+    }
+
     canvas {
       position: absolute;
       top: 0; 
@@ -119,7 +129,7 @@
     function renderMinutes(date) {
       var minute = date.getMinutes();
       var sec = date.getSeconds();
-      
+
       ctx.beginPath();
       ctx.arc(x3, height / 2, r3, 0, degToRad(minute * 6 + sec * 0.1)); // each minute is 6 degree + equivalent degree for second
       ctx.strokeStyle = "#f25f5c";
