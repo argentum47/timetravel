@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cluck</title>
+  <style>
+    canvas {
+      position: absolute;
+      top: 0; 
+      right: 0;
+      left: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="myCanvas" width="800" height="300">
+    Your browser does not support the HTML5 canvas tag.</canvas>
+
+    <script>
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+
+      var r1 = 40, r2 = 60, r3 = 80, r4 = 100;
+      var x1 = r1 + 20, x2 = 2 * r1 + 20 + 30 + r2;
+      var x3 = 2 * r1 + 20 + 2 * r2 + 20 + 50 + r3, x4 = 2 * r1 + 20 + 2 * r2 + 20 + 2 * r3 + 20 + 70 + r4;
+
+
+      var date = new Date();
+      var width = 800, height = 300;
+      var txtWidth;
+      var fram;
+      var yearArray = [360/31, isLeap() ? 360/29 : 360/28, 360/31, 12, 360/31, 12, 360/31, 360/31, 12, 360/31, 12, 360/31];
+
+      function isLeap() {
+        return new Date(date.getFullYear(), 1, 29).getMonth() == 1
+      }
+
+      function degToRad(degree) {
+        return degree * (Math.PI / 180);
+      }
+
+      function play() {
+        fram = requestAnimationFrame(drawCircle);
+      }
+
+      function stop() {
+        if(fram) {
+          cancelAnimationFrame(fram);
+          fram = undefined;
+        }
+      }
+
+      function drawCircle() {
+        date = new Date;
+
+        ctx.fillStyle =  "ffffff";
+        ctx.fillRect(0, 0, c.width,c.height);
+        ctx.clearRect(0, 0, c.width, c.height);
+        ctx.lineWidth = 5;
+
+      // days
+      renderDays(date)
+
+      // hour
+      renderHours(date);
+
+      // minute
+      renderMinutes(date);
+      
+      // second
+      renderSeconds(date)
+      
+      fram = requestAnimationFrame(drawCircle);
+    }
+    
+    function renderDays(date) {
+      var day = date.getDate();
+      ctx.beginPath();
+      ctx.arc(x1, height / 2, r1, 0, degToRad(day * yearArray[date.getMonth()]));
+      ctx.strokeStyle = "#6366ce";
+      ctx.stroke();
+      ctx.closePath();
+      
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.font = "bold " + r1/2 +"px serif";
+      txtWidth = ctx.measureText(day).width;
+      ctx.fillText(day, x1 - txtWidth/2,  height / 2 + txtWidth / 4);
+      ctx.font = "normal " + r1/4 +"px serif";
+      txtWidth = ctx.measureText("days").width;
+      ctx.fillText("day", x1 - txtWidth/2,  height / 2 + txtWidth / 4 + 20);
+      ctx.closePath();
+    }
+    
+    function renderHours(date) {
+      var hour = date.getHours();
+      ctx.beginPath();
+      ctx.arc(x2, height / 2, r2, 0, degToRad(hour * 15 + minute * 0.25 + sec * 0.00417)); // each hour is 30 degree, but because 24 hour clock is 30 / 2
+      ctx.strokeStyle = "#49dd8e";
+      ctx.stroke();
+      ctx.closePath();
+      
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.font = "bold " + r2/2 +"px serif";
+      txtWidth = ctx.measureText(hour).width;
+      ctx.fillText(hour, x2 - txtWidth/2,  height / 2 + txtWidth / 4);
+      ctx.font = "normal " + r2/4 +"px serif";
+      txtWidth = ctx.measureText("hours").width;
+      ctx.fillText("hours", x2 - txtWidth/2,  height / 2 + txtWidth / 4 + 20);
+      ctx.closePath();
+    }
+    
+    function renderMinutes(date) {
+      var minute = date.getMinutes();
+      ctx.beginPath();
+      ctx.arc(x3, height / 2, r3, 0, degToRad(minute * 6 + sec * 0.1)); // each minute is 6 degree + equivalent degree for second
+      ctx.strokeStyle = "#f25f5c";
+      ctx.stroke();
+      ctx.closePath();
+      
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.font = "bold " + r3/2 +"px serif";
+      txtWidth = ctx.measureText(minute).width;
+      ctx.fillText(minute, x3 - txtWidth/2,  height / 2 + txtWidth / 4);
+      ctx.font = "normal " + r3/4 +"px serif";
+      txtWidth = ctx.measureText("seconds").width;
+      ctx.fillText("minutes", x3 - txtWidth/2,  height / 2 + txtWidth / 4 + 20);
+      ctx.closePath();
+    }
+    
+    function renderSeconds(date) {
+      var sec  = date.getSeconds();
+      var nuSec = sec + (date.getMilliseconds()/1000);
+      
+      ctx.beginPath();
+      ctx.arc(x4, height / 2, r4, 0, degToRad(nuSec * 6));
+      ctx.strokeStyle = "#224870";
+      ctx.stroke();  
+      ctx.closePath();
+      
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.font = "bold " + r4/2 +"px serif";
+      txtWidth = ctx.measureText(sec).width;
+      ctx.fillText(sec, x4 - txtWidth/2,  height / 2 + txtWidth / 4);
+      ctx.font = "normal " + r4/4 +"px serif";
+      txtWidth = ctx.measureText("seconds").width;
+      ctx.fillText("seconds", x4 - txtWidth/2,  height / 2 + txtWidth / 4 + 20);
+      ctx.closePath();
+    }
+    play()
+
+  </script>
+
+</body>
+
+</html>
