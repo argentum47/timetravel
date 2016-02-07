@@ -76,6 +76,7 @@
     
     function renderDays(date) {
       var day = date.getDate();
+
       ctx.beginPath();
       ctx.arc(x1, height / 2, r1, 0, degToRad(day * yearArray[date.getMonth()]));
       ctx.strokeStyle = "#6366ce";
@@ -95,6 +96,9 @@
     
     function renderHours(date) {
       var hour = date.getHours();
+      var minute = date.getMinutes();
+      var sec = date.getSeconds();
+
       ctx.beginPath();
       ctx.arc(x2, height / 2, r2, 0, degToRad(hour * 15 + minute * 0.25 + sec * 0.00417)); // each hour is 30 degree, but because 24 hour clock is 30 / 2
       ctx.strokeStyle = "#49dd8e";
@@ -114,6 +118,8 @@
     
     function renderMinutes(date) {
       var minute = date.getMinutes();
+      var sec = date.getSeconds();
+      
       ctx.beginPath();
       ctx.arc(x3, height / 2, r3, 0, degToRad(minute * 6 + sec * 0.1)); // each minute is 6 degree + equivalent degree for second
       ctx.strokeStyle = "#f25f5c";
