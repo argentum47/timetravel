@@ -17,7 +17,7 @@ function generateCounter(e) {
   var date    = +$("#date").value;
   var month   = +$("#month").value;
   var year    = +$("#year").value;
-
+  console.log(validate.date(date), validate.month(month), validate.year(year), "jaja");
   if(validate.date(date) && validate.month(month) && validate.year(year)) {
     var endDate = new Date(year, month - 1, date);
     var content = generateUrl(subject, endDate);
@@ -32,7 +32,7 @@ function startCounter() {
       $(".form").classList.remove("block");
       $("#reset").classList.remove("hidden");
       $("#myCanvas").classList.remove("hidden");
-      
+
       var u = new URLSearchParams(window.location.search.slice(1));
       var content = base64decode(u.get('content').slice(0, -1));
       var data = retriveContent(content);
@@ -65,7 +65,7 @@ var validate = {
   },
 
   date: function(d) {
-    return d < 31 && d >= (this.today().getDate());
+    return d < 31 && d > 0;
   },
 
   month: function(m) {
@@ -99,7 +99,7 @@ function generateUrl(subject, date) {
   return `${location}?content=${base64encode(content)}`;
 }
 
-function runTimer(subject, endDate) {  
+function runTimer(subject, endDate) {
   var c = document.getElementById("myCanvas");
   var ctx = c.getContext("2d");
 
@@ -110,7 +110,7 @@ function runTimer(subject, endDate) {
   var height = c.height;
   var txtWidth;
   var fram;
-  
+
   function degToRad(degree) {
     return degree * (Math.PI / 180);
   }
@@ -118,17 +118,17 @@ function runTimer(subject, endDate) {
   function play() {
     fram = requestAnimationFrame(drawCircle);
   }
-  
+
       function stop() {
       if(fram) {
         cancelAnimationFrame(fram);
         fram = undefined;
       }
     }
-    
+
     function drawCircle() {
       var date = DateMeasure(endDate);
-      
+
       ctx.fillStyle =  "ffffff";
       ctx.fillRect(0, 0, c.width,c.height);
       ctx.clearRect(0, 0, c.width, c.height);
@@ -136,20 +136,20 @@ function runTimer(subject, endDate) {
 
       // days
       renderDays(date)
-    
+
       // hour
       renderHours(date);
-    
+
       // minute
       renderMinutes(date);
-      
+
       // second
       renderSeconds(date)
-      
+
       fram = requestAnimationFrame(drawCircle);
       if(date.diff <= 0) stop();
     }
-    
+
      function renderDays(date) {
       var day = date.days;
       ctx.beginPath();
@@ -157,7 +157,7 @@ function runTimer(subject, endDate) {
       ctx.strokeStyle = "#6366ce";
       ctx.stroke();
       ctx.closePath();
-      
+
       ctx.beginPath();
       ctx.fillStyle = "black";
       ctx.font = "bold " + r1/2 +"px serif";
@@ -168,7 +168,7 @@ function runTimer(subject, endDate) {
       ctx.fillText("days", x1 - txtWidth/2,  height / 2 + txtWidth / 4 + 20);
       ctx.closePath();
     }
-    
+
     function renderHours(date) {
       var hour = date.hours;
       var minute = date.minutes;
@@ -178,7 +178,7 @@ function runTimer(subject, endDate) {
       ctx.strokeStyle = "#49dd8e";
       ctx.stroke();
       ctx.closePath();
-      
+
       ctx.beginPath();
       ctx.fillStyle = "black";
       ctx.font = "bold " + r2/2 +"px serif";
@@ -189,7 +189,7 @@ function runTimer(subject, endDate) {
       ctx.fillText("hours", x2 - txtWidth/2,  height / 2 + txtWidth / 4 + 20);
       ctx.closePath();
     }
-    
+
     function renderMinutes(date) {
       var minute = date.minutes;
       var sec = date.seconds;
@@ -198,7 +198,7 @@ function runTimer(subject, endDate) {
       ctx.strokeStyle = "#f25f5c";
       ctx.stroke();
       ctx.closePath();
-      
+
       ctx.beginPath();
       ctx.fillStyle = "black";
       ctx.font = "bold " + r3/2 +"px serif";
@@ -209,17 +209,17 @@ function runTimer(subject, endDate) {
       ctx.fillText("minutes", x3 - txtWidth/2,  height / 2 + txtWidth / 4 + 20);
       ctx.closePath();
     }
-    
+
     function renderSeconds(date) {
       var sec  = date.seconds;
       var nuSec = sec + (date.milliseconds/1000);
-      
+
       ctx.beginPath();
       ctx.arc(x4, height / 2, r4, 0, degToRad(nuSec * 6));
       ctx.strokeStyle = "#224870";
-      ctx.stroke();  
+      ctx.stroke();
       ctx.closePath();
-      
+
       ctx.beginPath();
       ctx.fillStyle = "black";
       ctx.font = "bold " + r4/2 +"px serif";
@@ -230,10 +230,10 @@ function runTimer(subject, endDate) {
       ctx.fillText("seconds", x4 - txtWidth/2,  height / 2 + txtWidth / 4 + 20);
       ctx.closePath();
     }
-    play();  
-    
-    
+    play();
+
+
   var content = `${subject} comming soon in`;
   $("output").innerHTML = content;
-  
+
 }
