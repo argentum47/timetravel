@@ -17,7 +17,7 @@ function generateCounter(e) {
   var date    = +$("#date").value;
   var month   = +$("#month").value;
   var year    = +$("#year").value;
-  console.log(validate.date(date), validate.month(month), validate.year(year), "jaja");
+
   if(validate.date(date) && validate.month(month) && validate.year(year)) {
     var endDate = new Date(year, month - 1, date);
     var content = generateUrl(subject, endDate);
@@ -37,7 +37,13 @@ function startCounter() {
       var content = base64decode(u.get('content').slice(0, -1));
       var data = retriveContent(content);
 
-      runTimer(data.subject, new Date(data.date));
+      var title = $("title");
+      var endDate = new Date(data.date);
+      var diff = DateMeasure(endDate);
+
+      title.textContent = `${data.subject} in ${diff.days} days ${diff.hours} hours ${diff.minutes} minutes ${diff.seconds} seconds`;
+
+      runTimer(data.subject, endDate);
     }
   }
 }
@@ -232,8 +238,6 @@ function runTimer(subject, endDate) {
     }
     play();
 
-
-  var content = `${subject} comming soon in`;
-  $("output").innerHTML = content;
+  $("output").innerHTML = `${subject} in`;
 
 }
